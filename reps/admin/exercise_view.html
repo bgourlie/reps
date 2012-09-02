@@ -1,0 +1,18 @@
+{% extends "../masterTemplate.html" %}
+{% block title %}Viewing Exercise {{ exercise.name }}{% endblock %}
+{% block head %}{% endblock %}
+{% block content %}
+<h1>Viewing Exercise {{ exercise.name }}</h1>
+<ul>
+{% regroup exercise_muscles|dictsortreversed:"role" by role as em_group %}
+{% for group in em_group %}
+<li>{{ group.grouper|capfirst }}
+<ul>
+{% for exercise_muscle in group.list %}
+	<li>{{ exercise_muscle.muscle.name }}</li>
+{% endfor %}
+</ul>
+</li>
+{% endfor %}
+</ul>
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends "../masterTemplate.html" %}
+{% block title %}My Workouts{% endblock %}
+{% block document_ready %}
+{% endblock %}
+{% block content %}
+<h2>My Workouts</h2>
+{% if workouts %}
+<ul>
+{% for workout in workouts %}
+<li>{{workout.name}} (<a href="./workout_log?workout={{workout.key}}">Record</a> - <a href="./workout_print_log?workout={{workout.key}}">Print Workout Sheet</a> - <a href="./workout_view?workout={{workout.key}}">View</a> - <a href="./workout_create_or_edit?edit={{workout.key}}">Edit</a> - <a href="#not_implemented">Delete</a>)</li>
+{% endfor %}
+</ul>
+{% else %}
+<p>You don't have any workouts defined.  You can create a workout by clicking the "Create Workout" link in the navigation bar above.</p>
+{% endif %}
+{% endblock %}

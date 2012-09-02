@@ -1,0 +1,32 @@
+#Application Settings for Reps workout record keeping
+application: reps
+version: 1
+runtime: python
+api_version: 1
+
+handlers:
+
+- url: /stylesheets
+  static_dir: static/stylesheets
+  
+- url: /images
+  static_dir: static/images
+  
+- url: /javascript
+  static_dir: static/javascript
+
+- url: /admin/setup
+  script: admin/setup.py
+  login: admin
+  
+- url: /admin/.*
+  script: admin/admin.py
+  login: admin
+
+- url: /users/.*
+  script: users/users.py
+  login: required
+  
+- url: /.*
+  script: public.py
+

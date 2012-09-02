@@ -1,0 +1,24 @@
+{% extends "../masterTemplate.html" %}
+
+{% block title %}Create Exercise{% endblock %}
+{% block document_ready %}
+/** test code
+var body_back = $("#body_back");
+var muscle_test = $("#muscle_test");
+body_back.attr('src','/images/body_back.png');
+muscle_test.attr('src','/images/test.png');
+*/
+{% endblock %}
+{% block content %}
+Welcome to reps
+<ul>
+<li><a href="./muscles">Manage Muscles</a></li>
+<li><a href="./exercises">Manage Exercises</a></li>
+</ul>
+<!-- test code
+<div style="position:relative" id="composite" >
+<img style="position:relative;top:0px;left:0px;" id="body_back" />
+<img style="position:absolute;top:50px;left:100px;" id="muscle_test" />
+</div>
+-->
+{% endblock %}

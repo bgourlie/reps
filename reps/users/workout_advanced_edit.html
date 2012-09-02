@@ -1,0 +1,89 @@
+{% extends "../masterTemplate.html" %}
+{% block title %}Record Exercises{% endblock %}
+{% block document_ready %}
+var workoutOrder = 0;
+
+var validateFields = function(){
+	var curField;
+	
+	$("input[type='text']").each(function(){
+		curField = $(this);
+		
+		if(jQuery.trim(curField.val()) != ""){
+			if(curField.attr('class') == 'weight'){
+				if(isNaN(curField.val()) || curField.val() < 0){
+					curField.css('background-color','yellow');
+					alert('You must enter "0" or positive number in the highlighted weight field.');
+					return false;
+				}
+			}else if(curField.attr('class') == 'reps'){
+				if(isNaN(curField.val()) || curField.val() < 1){
+					curField.css('background-color','yellow');
+					alert('You must enter a positive number in the reps field.');
+					return false;
+				}	
+			}
+		}
+	});
+	
+	return true;
+};
+
+var createSets = function(exercise_key, numSets){
+	
+	var exercise_table = $("table[name='" + exercise_key + "_table']");
+	for(var set = 1; set <= numSets; set++){
+		var html = "<tr>" +
+			    "<td>" + set + "</td>" +
+			    "<td><input class='weight' type='text' name='" + exercise_key + "_target_weight' size='9' /></td>" +
+			    "<td><input class='reps' type='text' name='" + exercise_key + "_target_reps' size='9' /></td>" +
+			    "</tr>"
+		exercise_table.append($(html));
+	}
+};
+
+$("form").submit(function(){
+return validateFields();
+});
+
+//remaining form init
+{% for exercise in exercises %}
+createSets('{{exercise.key}}', 3);
+{% endfor %}
+
+$("input[type='text']").focus(function(){
+	//put back to white if highlighted due to error
+	$(this).css('background-color','white');
+});
+
+
+
+{% endblock %}
+{% block content %}
+<p>Here you can define <i>targets</i>.  A target is the goal you want to achieve with each exercise.  Targets are optional.
+For example, you may not want to define a target weight, but you want to complete 6 repetitions for a particular set.  
+Targets will help guide you through your workouts.</p>
+<form action="./workout_create_or_edit_submit" method="post">
+<input type="hidden" name="workout_name" value="{{workout_name}}" />
+<input type="hidden" name="workout_to_edit_key" value="{{workout_to_edit_key}}" />
+{% for tag in tags %}
+<input type="hidden" name="tags" value="{{tag}}" />
+{% endfor %}
+
+{% for exercise in exercises %}
+<table name="{{ exercise.key }}_table">
+<tr>
+<th colspan="3">{{ exercise.name }}</th>
+</tr>
+<tr>
+<th>Set</th>
+<th>Target Weight</th>
+<th>Target Reps</th>
+</tr>
+</table>
+{% endfor %}
+<br />
+<input type="submit" value="Submit Workout" />
+</form>
+
+{% endblock %}

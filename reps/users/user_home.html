@@ -1,0 +1,21 @@
+{% extends "../masterTemplate.html" %}
+{% block title %}My Workouts{% endblock %}
+{% block document_ready %}
+{% endblock %}
+{% block content %}
+<h3>Recent Workouts</h3>
+{% if recent_workouts %}
+<ul>
+{% for workout_record in recent_workouts %}
+<li>{{workout_record.workout.name}} <span class="smalltext">({{workout_record.date}})</span></li>
+{% endfor %}
+</ul>
+{% else %}
+You have not recorded any workouts.
+{% endif %}
+<h3>Personal Bests</h3>
+Not Implemented
+
+<h3>Upcoming Workouts</h3>
+Not Implemented
+{% endblock %}

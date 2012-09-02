@@ -1,0 +1,73 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<link rel="stylesheet" href="/stylesheets/screen.css" />
+
+<script type="text/javascript" src="/javascript/jquery.js"></script>
+<script type="text/javascript" src="/javascript/reps.js"></script>
+<script>
+$(document).ready(function() {
+{% block document_ready %}{% endblock %}
+});
+</script>
+
+
+<style type="text/css">
+{% block css %}{% endblock %}
+</style>
+
+</head>
+
+<body>
+<div id="site_nav">
+<h1>REPS</h1>&nbsp;Exercise Management
+<ul class="menu">
+<li><a href="/">Home</a></li>
+<li><a href="/help">Help</a></li>
+<li><a href="/about">About</a></li>
+<li><a href="/contact_us">Contact Us</a></li>
+</ul>
+</div>
+
+<div id="user_nav" class="nav">
+<ul class="menu">
+{% if reps_user %}
+<li><a href="/users/home">User Home</a></li>
+<li><a href="/users/my_workouts">My Workouts</a></li>
+<li><a href="/users/workout_create_or_edit">Create Workout</a></li>
+{% endif %}
+{% if logout_url %}
+<li><a href="{{logout_url}}">Log Off</a></li>
+{% else %}
+<li><a href="{{login_url}}">Log In</a></li>
+{% endif %}
+</ul>
+
+{% if reps_user %}
+<span class="smalltext" style="padding-left:20px;">Logged in as {{reps_user.nickname}}</span>
+{% endif %}
+</div>
+
+	{% if errors %}
+		<p>The following errors occured:</p>
+		<ul>
+		{% for error in errors %}
+			<li>{{ error }}</li>
+		{% endfor %}
+		</ul>
+	{% endif %}
+	
+	{% if messages %}
+		<ul>
+		{% for message in messages %}
+			<li>{{ message }}</li>
+		{% endfor %}
+		</ul>
+	{% endif %}
+	
+    <div id="content">
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

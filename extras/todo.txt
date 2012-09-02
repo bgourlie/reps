@@ -1,0 +1,13 @@
+	-- for first release to live --
+*if logged in, but no reps user set up, and you are not in the /users/* area, you will get no user menu
+*improve layout/colors
+*add more workouts to setup.py, and have it also include muscle and role information to datastore
+*user home will not include any functionality this first release, just basic instructions how to get started.
+*write up a quick "Help" and "Contact Us" page
+*implement deleting of workouts (http://localhost:8080/users/my_workouts)
+*create_or_delete_exercise does not validate for only 1 target on the client side
+
+	-- future features --
+*workout_print_log will show how many weights/reps (or miles/time/etc, depending on type of workong were done the last time the workout was recorded
+*when creating a workout, add the ability to have "target" goals, like target reps for a particular exercise
+*composite muscle map

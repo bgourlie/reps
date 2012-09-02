@@ -1,0 +1,40 @@
+{% extends "../masterTemplate.html" %}
+{% block title %}{{workout.name}} Log{% endblock %}
+{% block document_ready %}
+{% for workout_exercise in workout_exercises %}
+for(var set = 1; set <= {{workout_exercise.sets}}; set++){
+	var html = "<tr><td>" + set + "</td><td class='data'></td><td class='data'></td></tr>"
+	$("table[class='{{workout_exercise.key}}']").append($(html));
+}
+{% endfor %}
+{% endblock %}
+{% block css %}
+body{
+background-color:white;
+}
+
+#site_nav, #user_nav,#public_nav{
+	display: none;
+}
+
+td.data{
+border: 1px solid black;
+width: 100px;
+height: 30px;
+}
+{% endblock %}
+
+{% block content %}
+<h1>{{workout.name}} Log</h1>
+Date Recorded: _________________________
+
+{% for workout_exercise in workout_exercises %}
+<h2>{{workout_exercise.exercise.name}}</h2>
+<table class="{{workout_exercise.key}}">
+<tr>
+<th>Set</th><th>Weight</th><th>Reps</th>
+</tr>
+</table>
+{% endfor %}
+{% endblock %}
+

@@ -1,0 +1,45 @@
+{% extends "../masterTemplate.html" %}
+{% block title %}Edit Muscle{% endblock %}
+{% block document_ready %}
+var muscleNameText = $("input[name='muscle_name']");
+var muscleLocationSelect = $("select[name='muscle_location']");
+var submitButton = $("input[name='muscle_submit']");
+
+submitButton.click(function(){
+//data validation
+});
+
+//populate form fields if edit
+muscleNameText.val('{{ muscle.name }}');
+muscleLocationSelect.val('{{muscle.location}}');
+{% endblock %}
+{% block content %}
+<h1>Create New Muscle</h1>
+<form action="muscle_create_or_edit" method="post">
+<table>
+<tr>
+<th style="text-align:left;">Muscle Name</th>
+<th style="text-align:left;" colspan="2">Muscle Location</td>
+</tr>
+<tr>
+<td><input type="text" name="muscle_name" /></td>
+<td colspan="2">
+<select name="muscle_location">
+<option value="">Select one...</option>
+<option value="Neck">Neck</option>
+<option value="Shoulders">Shoulders</option>
+<option value="Upper Arms">Upper Arms</option>
+<option value="Forearms">Forearms</option>
+<option value="Back">Back</option>
+<option value="Chest">Chest</option>
+<option value="Waist">Waist</option>
+<option value="Hips">Hips</option>
+<option value="Thighs">Thighs</option>
+<option value="Calves">Calves</option>
+</select>
+</td>
+</tr>
+</table>
+<input type="submit" name="muscle_submit" value="Submit Muscle" />
+</form>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends "../masterTemplate.html" %}
+{% block document_ready %}
+var valid_regexp = /^[a-zA-Z0-9_]{4,28}$/;
+var nicknameTextbox = $("input[name='nickname']");
+
+$('form').submit(function(){
+	if(!valid_regexp.test(nicknameTextbox.val())){
+		alert("Your nickname must be a minimum of 4 characters and a maximum of 28 characters, and contain only letters, numbers, and underscores");
+		return false;
+	}
+	
+	return true;
+});
+{% endblock %}
+{% block content %}
+<h2>Welcome to REPS!</h2>  
+<p>It looks like this is your first time logging in.  You will always use your 
+google account to log in, but we would like to set you up with a REPS specific 
+nickname.  Please enter it below, and keep in mind, no spaces or special 
+characters, however underscores OK.  Your nickname must be atleast 4 characters 
+long, too.</p>
+<form action="." method="post">
+<label>Your REPS Nickname: <input type="text" name="nickname" /></label>
+<input type="hidden" name="redirect_url" value="{{ redirect_url }}" />
+<input type="submit" value="Submit" />
+</form>
+{% endblock %}

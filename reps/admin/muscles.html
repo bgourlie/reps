@@ -1,0 +1,18 @@
+{% extends "../masterTemplate.html" %}
+{% block title %}Manage Muscles{% endblock %}
+{% block head %}{% endblock %}
+{% block content %}
+<h1>Manage Muscles</h1>
+<ul>
+{% regroup muscles|dictsort:"location" by location as muscle_group %}
+{% for group in muscle_group %}
+<li>{{ group.grouper }}
+<ul>
+{% for muscle in group.list %}
+	<li>{{ muscle.name }} <span class="smalltext">(<a href="muscle_view?exercise={{ muscle.key }}">View</a> - <a href="muscle_create_or_edit?edit={{ muscle.key }}">Edit</a> - <a href="muscle_delete?muscle={{ muscle.key }}">Delete</a>)</span></li>
+{% endfor %}
+</ul>
+</li>
+{% endfor %}
+</ul>
+{% endblock %}

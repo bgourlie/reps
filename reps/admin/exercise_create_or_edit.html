@@ -1,0 +1,129 @@
+{% extends "../masterTemplate.html" %}
+
+{% block title %}Create Exercise{% endblock %}
+{% block document_ready %}
+   //variable init
+   var exerciseNameText = $("input[name='exercise_name']");
+   var exerciseTypeSelect = $("select[name='exercise_type']");
+   var roleSelectGroup = $("select[name='roles']");
+   var muscleCheckboxGroup = $("input[name='muscles']");
+   var submitButton = $("input[type='submit']");
+   
+   //page init
+   roleSelectGroup.hide();
+   roleSelectGroup.attr("selectedIndex", 0);
+   muscleCheckboxGroup.val([]);
+   
+   //event handlers
+   muscleCheckboxGroup.change(function() {
+      var selectedIndex = muscleCheckboxGroup.index(this);
+      var selectBox = roleSelectGroup.eq(selectedIndex);
+      selectBox.toggle();
+      selectBox.attr("selectedIndex", 0);
+   });
+   
+   submitButton.click(function(){
+		//form validation
+		exerciseName = exerciseNameText.val();
+		if(exerciseName.length < 3 || exerciseName.length > 30){
+			alert("The exercise name must be at least 3 characters long, and at most 30 characters long.  The current length is " + exerciseName.length + ".");
+			return false;
+		}
+		
+		if(exerciseTypeSelect.val() == ""){
+			alert("You must select an exercise type.");
+			return false; 	
+		}
+		
+		//validation passed to this point
+		//now we make sure that there is at least one "target" muscle role defined
+		var valid = false;
+		muscleCheckboxGroup.filter(":checked").each(function(){
+			var currentCheckboxIndex = muscleCheckboxGroup.index(this);
+			var correspondingSelect = roleSelectGroup.eq(currentCheckboxIndex);
+			if(correspondingSelect.val() == "Target"){
+				valid = true;
+			}
+		});
+		   	
+		if(!valid){
+			alert("You must select at least one target muscle.");
+			return false;
+		}
+		return true;
+   });
+   
+   {% if exercise %}
+   		exerciseNameText.val('{{ exercise.name }}');
+   		exerciseTypeSelect.val('{{ exercise.type }}');
+   		var muscles = [{% for exercise_muscle in exercise_muscles %}"{{ exercise_muscle.muscle.key }}"{% if not forloop.last %},{% endif %}{% endfor %}];
+   		var roles = [{% for exercise_muscle in exercise_muscles %}"{{ exercise_muscle.role }}"{% if not forloop.last %},{% endif %}{% endfor %}];
+   		muscleCheckboxGroup.each(function(){
+   			for(var i in muscles){
+   				if($(this).val() == muscles[i]){
+   					this.checked = true;
+   					var correspondingSelect = roleSelectGroup.eq(muscleCheckboxGroup.index(this));
+   					correspondingSelect.val(roles[i]);
+   					correspondingSelect.show();
+   				}
+   			}
+   		});
+   {% endif %}
+{% endblock %}
+
+{% block content %}
+
+<form method="post" action="./exercise_create_or_edit">
+{% if exercise %}
+	<h1 style="display:inline">Editing Exercise {{ exercise.name }}</h1> or <a href="./exercise_create_or_edit">Create New</a>
+	<input type="hidden" value="{{ exercise.key }}" name="edit_exercise" />
+{% else %}
+	<h1>Creating New Exercise</h1>
+{% endif %}
+
+<table>
+<tr>
+<th style="text-align:left;">Exercise Name</th>
+<th style="text-align:left;" colspan="2">Exercise Type</td>
+</tr>
+<tr>
+<td><input type="text" name="exercise_name" /></td>
+<td colspan="2"><select name="exercise_type">
+<option value="">Select one...</option>
+<option value="Repetition">Repetition</option>
+<option value="Distance">Distance</option>
+<option value="Duration">Duration</option>
+</select>
+</td>
+</tr>
+
+<tr><td colspan="2">&nbsp;</td></tr>
+<tr><th colspan="2" style="text-align:left;">Muscles affected</th></tr>
+{% regroup muscles by location as muscleGroup %}
+{% for group in muscleGroup %}
+	<tr><td colspan="2">&nbsp;</td></tr>
+	<tr><td colspan="2"><b>{{ group.grouper }}</b></td></tr>
+	{% for muscle in group.list %}
+		<tr>
+		<td><input type="checkbox" name="muscles" value="{{ muscle.key }}" /> {{ muscle.name }}</td>
+		<td>
+			<select name="roles">
+				<option value="">Select One...</option>
+				<option value="Target">Target</option>
+				<option value="Synergist">Synergist</option>
+				<option value="Dynamic Stabilizer">Dynamic Stabilizer</option>
+				<option value="Stabilizer">Stabilizer</option>
+				<option value="Antagonist Stabilizer">Antagonist Stabilizer</option>
+			</select>
+		</td>
+		</tr>
+	{% endfor %}
+{% endfor %}
+
+<tr><td colspan="3">&nbsp </td></tr>
+<tr>
+<td colspan="3"><input type="submit" value="Submit Exercise" /></td>
+</tr>
+</form>
+
+{% endblock %}

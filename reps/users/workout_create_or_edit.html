@@ -1,0 +1,82 @@
+{% extends "../masterTemplate.html" %}
+{% block document_ready %}
+var workoutNameTextbox = $("input[name='workout_name']");
+var tagsTextboxGroup = $("input[name='tags']");
+
+function createExerciseDiv(exercise_key, exercise_name){
+	$("#workout").append ($("<div><h3>" + exercise_name + "</h3><input type='hidden' name='exercise_keys' value='" + exercise_key + "' /><input type='radio' name='insertAfter' checked='checked' /><button name='delete'>Delete</button></div>"));
+}
+
+$("button[name='exercise']").click(function(){
+var exercise_name = $(this).text();
+var exercise_key = $(this).attr("value");
+createExerciseDiv(exercise_key, exercise_name);
+return false; //prevent it from submitting the form
+});
+
+
+{% if workout %}
+workoutNameTextbox.val("{{workout.name}}");
+
+{% for tag in workout.tags %}
+tagsTextboxGroup.eq({{forloop.counter0}}).val("{{tag}}");
+{% endfor %}
+
+{% for workout_exercise in workout_exercises %}
+createExerciseDiv("{{workout_exercise.key}}","{{workout_exercise.exercise.name}}");
+{% endfor %}
+{% endif %}
+
+{% endblock %}
+{% block content %}
+<p>Choose from the exercises below for this workout.  You can add tags so you can easily find it again.  Use a descriptive word or phrase, such as "Heavy Leg Day" or "Upper Body."</p>
+<form method="post" action="./workout_create_or_edit">
+{% if workout %}
+<input type="hidden" value="{{ workout.key }}" name="edit_workout" />
+{% endif %}
+<table>
+<tr>
+<td colspan="3">Workout Name:</td>
+</tr>
+<tr>
+<td colspan="3"><input type="text" name="workout_name" /></td>
+</tr>
+<tr>
+<td colspan="3">Tags (optional):</td>
+</tr>
+<tr>
+<td><input type="text" name="tags" /></td><td><input type="text" name="tags" /></td><td><input type="text" name="tags" /></td>
+</tr>
+<tr>
+<td><input type="text" name="tags" /></td><td><input type="text" name="tags" /></td><td><input type="text" name="tags" /></td>
+</tr>
+</table>
+<table>
+<tr><td><b>Repetition Exercises</b></td><td><b>Duration Exercises</b></td><td><b>Distance Exercises</b></td></tr>
+<td>
+
+{% regroup exercises by target_location as exerciseGroup %}
+{% for group in exerciseGroup %}
+
+{{ group.grouper }}
+<br />
+
+{% for exercise in group.list %}
+<button name="exercise" value="{{exercise.key}}">{{exercise.name}}</button>
+{% endfor %}
+
+<br />
+{% endfor %}
+
+</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+</table>
+<div id="workout">
+<h2>Your Workout</h2>
+
+</div>
+
+<input type="submit" value="Submit" />
+</form>
+{% endblock %}

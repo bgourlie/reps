@@ -1,0 +1,17 @@
+{% extends "../masterTemplate.html" %}
+{% block title %}Manage Exercises{% endblock %}
+{% block content %}
+<h1>Manage Exercises</h1>
+<ul>
+{% regroup exercises by target_location as exercise_group %}
+{% for group in exercise_group %}
+<li>{{ group.grouper }}
+<ul>
+{% for exercise in group.list %}
+	<li>{{ exercise.name }} <span class="smalltext">(<a href="exercise_view?exercise={{ exercise.key }}">View</a> - <a href="exercise_create_or_edit?edit={{ exercise.key }}">Edit</a> - <a href="exercise_delete?exercise={{ exercise.key }}">Delete</a>)</span></li>
+{% endfor %}
+</ul>
+</li>
+{% endfor %}
+</ul>
+{% endblock %}
